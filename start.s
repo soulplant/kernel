@@ -24,7 +24,10 @@ stack_top:
 section .text:
 align 4
 
+extern kmain
+
 start:
   mov esp, stack_top
   mov [0xb8000], byte 67
+  call kmain
   jmp $

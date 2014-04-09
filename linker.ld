@@ -4,7 +4,7 @@ SECTIONS {
   . = 0x100000;
 
   .text : {
-    /* *(.multiboot) */
+    *(.multiboot)
     *(.text)
   }
 
@@ -22,5 +22,9 @@ SECTIONS {
     *(.bss)
     *(.bootstrap_stack)
     bss_end = .;
+  }
+
+  /DISCARD/ : {
+    *(.comment)
   }
 }
