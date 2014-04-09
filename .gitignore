@@ -1,0 +1,5 @@
+mnt/
+disks/
+*.swp
+*.o
+kernel
