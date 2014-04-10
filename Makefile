@@ -14,8 +14,8 @@ screen.o: screen.cc $(INCLUDES)
 runtime.o: runtime.cc $(INCLUDES)
 	$(CXX) $(CXXFLAGS) runtime.cc
 
-kernel.o: kernel.c $(INCLUDES)
-	$(CXX) $(CXXFLAGS) kernel.c
+kernel.o: kernel.cc $(INCLUDES)
+	$(CXX) $(CXXFLAGS) kernel.cc
 	# g++ -std=c++11 -fno-exceptions -fno-rtti -ffreestanding -c kernel.c
 
 clean:
