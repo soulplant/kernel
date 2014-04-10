@@ -1,5 +1,5 @@
 .gitignore
-!cxx = |> g++ -std=c++11 -fno-exceptions -fno-rtti -ffreestanding -c %f -o %o |> %B.o
+!cxx = |> g++ -std=c++11 -fno-exceptions -fno-rtti -ffreestanding -g -c %f -o %o |> %B.o
 !as = |> nasm -f elf %f -o %o |> %B.o
 !link = | linker.ld |> ld -melf_i386 -T linker.ld %f -o %o |>
 

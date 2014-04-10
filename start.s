@@ -29,5 +29,7 @@ extern kmain
 start:
   mov esp, stack_top
   mov [0xb8000], byte 67
+  push ebx
+  push eax
   call kmain
   jmp $
