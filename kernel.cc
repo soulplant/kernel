@@ -28,7 +28,7 @@ void PrintMemMap(uint32_t length, mmap_entry* entry) {
   for (mmap_entry* i = entry;
        ((uint32_t) i) < ((uint32_t) entry) + length;
        i = (mmap_entry*) (((uint32_t) i) + i->size + sizeof(i->size))) {
-    kprint(i->size, "->", (uint32_t) i->addr, ":", (uint32_t) i->len, ":", i->type, '\n');
+    kprintln(i->size, "->", (uint32_t) i->addr, ":", (uint32_t) i->len, ":", i->type);
   }
 }
 
@@ -47,6 +47,8 @@ void PrintVector(Vector<T>& v) {
 
 extern "C" void kmain(uint32_t magic, Multiboot* mb) {
   g_screen()->Clear();
+  int x[] = {1,2,3,4,5};
+  kprintln(x);
   kprintln("magic: ", Hex(magic));
   kprintln("flags: ", Binary(mb->flags));
   kprintln("mem_lower: ", mb->mem_lower);
@@ -62,9 +64,9 @@ extern "C" void kmain(uint32_t magic, Multiboot* mb) {
   v.emplace_back(5);
   v.erase(1);
   v.erase(1);
-  PrintVector(v);
+  // kprintln(v);
   // kprintln("int:", v[0]);
-  kprintln("size:", v.size());
+  // kprintln("size:", v.size());
   // kprint("int:", v[1], "\n");
 
   while (1);

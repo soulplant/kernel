@@ -31,9 +31,9 @@ static char* mem = (char*) (1024*1024);
 
 // TODO(koz): Don't leak everything.
 void* operator new(unsigned int s) {
+  kprintln("new(", s, ")");
   char* result = mem;
   mem += s;
-  kprintln("allocating ", s, " bytes at ", (uint32_t) result);
   return result;
 }
 
@@ -42,11 +42,7 @@ void operator delete(void*) {
 }
 
 void* operator new[](unsigned int s) {
-  void* mem = operator new(s + sizeof(unsigned int));
-  unsigned int* m = (unsigned int*) mem;
-  m[0] = s;
-  char* result = (char*) mem;
-  return (void*) (result + sizeof(unsigned int));
+  return operator new(s);
 }
 
 void operator delete[](void* p) {

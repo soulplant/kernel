@@ -77,4 +77,14 @@ class Vector {
   size_t capacity_;
 };
 
+template<class T>
+struct printer<Vector<T>> {
+  static void print(const Vector<T>& vec) {
+    kprint("[");
+    for (int i = 0; i < vec.size(); i++)
+      kprint(vec[i]);
+    kprint("]");
+  }
+};
+
 #endif  // VECTOR_H_
