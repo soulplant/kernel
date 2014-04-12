@@ -1,4 +1,8 @@
+#include <stddef.h>
 #include <stdint.h>
+
+#include "kprint.h"
+
 // Called before and after trying to initialize a static variable in
 // a function.
 namespace {
@@ -29,8 +33,27 @@ static char* mem = (char*) (1024*1024);
 void* operator new(unsigned int s) {
   char* result = mem;
   mem += s;
+  kprintln("allocating ", s, " bytes at ", (uint32_t) result);
   return result;
 }
 
-void operator delete(void *) {
+void operator delete(void*) {
+  // TODO
+}
+
+void* operator new[](unsigned int s) {
+  void* mem = operator new(s + sizeof(unsigned int));
+  unsigned int* m = (unsigned int*) mem;
+  m[0] = s;
+  char* result = (char*) mem;
+  return (void*) (result + sizeof(unsigned int));
+}
+
+void operator delete[](void* p) {
+  // TODO
+}
+
+void* memmove(void* dest, const void* src, size_t n) {
+  if (dest < src) {
+  }
 }

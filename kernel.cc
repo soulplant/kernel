@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include "screen.h"
 #include "kprint.h"
+#include "vector.h"
 
 struct Multiboot {
   uint32_t flags;
@@ -31,16 +32,40 @@ void PrintMemMap(uint32_t length, mmap_entry* entry) {
   }
 }
 
+template<class T>
+void PrintVector(Vector<T>& v) {
+  kprint("[");
+  bool first = true;
+  for (int i = 0; i < v.size(); i++) {
+    if (!first)
+      kprint(", ");
+    first = false;
+    kprint(v[i]);
+  }
+  kprintln("]");
+}
+
 extern "C" void kmain(uint32_t magic, Multiboot* mb) {
   g_screen()->Clear();
-  kprint("magic: ", Hex(magic), "\n");
-  kprint("flags: ", Binary(mb->flags), "\n");
-  kprint("mem_lower: ", mb->mem_lower, "\n");
-  kprint("mem_upper: ", mb->mem_upper, "\n");
-  kprint("mmap_length: ", mb->mmap_length, "\n");
-  kprint("mmap_addr: ", mb->mmap_addr, "\n");
+  kprintln("magic: ", Hex(magic));
+  kprintln("flags: ", Binary(mb->flags));
+  kprintln("mem_lower: ", mb->mem_lower);
+  kprintln("mem_upper: ", mb->mem_upper);
+  kprintln("mmap_length: ", mb->mmap_length);
+  kprintln("mmap_addr: ", mb->mmap_addr);
 
   PrintMemMap(mb->mmap_length, (mmap_entry*) mb->mmap_addr);
+
+  Vector<int> v;
+  v.push_back(3);
+  v.emplace_back(4);
+  v.emplace_back(5);
+  v.erase(1);
+  v.erase(1);
+  PrintVector(v);
+  // kprintln("int:", v[0]);
+  kprintln("size:", v.size());
+  // kprint("int:", v[1], "\n");
 
   while (1);
 }
