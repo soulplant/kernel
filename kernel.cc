@@ -32,19 +32,6 @@ void PrintMemMap(uint32_t length, mmap_entry* entry) {
   }
 }
 
-template<class T>
-void PrintVector(Vector<T>& v) {
-  kprint("[");
-  bool first = true;
-  for (int i = 0; i < v.size(); i++) {
-    if (!first)
-      kprint(", ");
-    first = false;
-    kprint(v[i]);
-  }
-  kprintln("]");
-}
-
 extern "C" void kmain(uint32_t magic, Multiboot* mb) {
   g_screen()->Clear();
   int x[] = {1,2,3,4,5};
