@@ -32,7 +32,10 @@ void PrintMemMap(uint32_t length, mmap_entry* entry) {
   }
 }
 
+extern "C" void SetupPic();
+
 extern "C" void kmain(uint32_t magic, Multiboot* mb) {
+  SetupPic();
   g_screen()->Clear();
   int x[] = {1,2,3,4,5};
   kprintln(x);
