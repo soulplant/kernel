@@ -2,6 +2,7 @@
 #include "screen.h"
 #include "kprint.h"
 #include "vector.h"
+#include "idt.h"
 
 struct Multiboot {
   uint32_t flags;
@@ -34,8 +35,29 @@ void PrintMemMap(uint32_t length, mmap_entry* entry) {
 
 extern "C" void SetupPic();
 
+struct InterruptInfo {
+  uint32_t int_no;
+  uint32_t err_code;
+};
+
+static uint32_t x = 0;
+static uint32_t o = 0;
+
+extern "C" void OnInterrupt(InterruptInfo info) {
+  x++;
+  o = info.int_no;
+}
+
+extern "C" void OnKeyboardInterrupt(uint32_t scancode) {
+  kprintln("keyboard: ", Hex(scancode), "(", x, ", ", o, ")");
+}
+
 extern "C" void kmain(uint32_t magic, Multiboot* mb) {
   SetupPic();
+  Idt idt;
+  idt.Load();
+  asm("sti");
+
   g_screen()->Clear();
   int x[] = {1,2,3,4,5};
   kprintln(x);
@@ -47,17 +69,6 @@ extern "C" void kmain(uint32_t magic, Multiboot* mb) {
   kprintln("mmap_addr: ", mb->mmap_addr);
 
   PrintMemMap(mb->mmap_length, (mmap_entry*) mb->mmap_addr);
-
-  Vector<int> v;
-  v.push_back(3);
-  v.emplace_back(4);
-  v.emplace_back(5);
-  v.erase(1);
-  v.erase(1);
-  // kprintln(v);
-  // kprintln("int:", v[0]);
-  // kprintln("size:", v.size());
-  // kprint("int:", v[1], "\n");
 
   while (1);
 }
