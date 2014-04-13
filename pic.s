@@ -25,6 +25,7 @@ SetupPic:
 
   ; PIC2's master address in binary
   mov al, 0x2
+  out PIC2CTL, al
 
   ; 8086 mode for both
   mov al, 0x1
