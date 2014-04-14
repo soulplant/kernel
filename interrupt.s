@@ -90,7 +90,7 @@ KeyboardIsr:
   in al, 0x60
   push eax
   call OnKeyboardInterrupt
-  ; pop eax
+  pop eax
   mov al, 0x20
   out 0x20, al  ; EOI
   out 0xA0, al  ; EOI
