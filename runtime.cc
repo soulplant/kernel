@@ -27,12 +27,15 @@ extern "C" void
 __cxa_guard_release(uint64_t* guard) {
 }
 
-static char* mem = (char*) (1024*1024);
+// Defined by the linker.
+extern uint32_t bss_end;
+
+static uint8_t* mem = (uint8_t*) &bss_end;
 
 // TODO(koz): Don't leak everything.
 void* operator new(unsigned int s) {
   kprintln("new(", s, ")");
-  char* result = mem;
+  uint8_t* result = mem;
   mem += s;
   return result;
 }
