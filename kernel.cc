@@ -29,7 +29,8 @@ void PrintMemMap(uint32_t length, mmap_entry* entry) {
   for (mmap_entry* i = entry;
        ((uint32_t) i) < ((uint32_t) entry) + length;
        i = (mmap_entry*) (((uint32_t) i) + i->size + sizeof(i->size))) {
-    kprintln(i->size, "->", (uint32_t) i->addr, ":", (uint32_t) i->len, ":", i->type);
+    kprintln(i->size, "->", Hex((uint32_t) i->addr),
+        ":", Hex((uint32_t) i->len), ":", i->type);
   }
 }
 
@@ -57,8 +58,8 @@ extern "C" void kmain(uint32_t magic, Multiboot* mb) {
   Idt idt;
   idt.Load();
   asm("sti");
-
   g_screen()->Clear();
+
   int x[] = {1,2,3,4,5};
   kprintln(x);
   kprintln("magic: ", Hex(magic));

@@ -113,6 +113,7 @@ struct printer<Binary> {
 template<>
 struct printer<Hex> {
   static void print(const Hex& b) {
+    kprint("0x");
     print_base(b.value, 16);
   }
 };
