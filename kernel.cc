@@ -18,17 +18,17 @@ struct Multiboot {
   uint32_t mmap_addr;
 };
 
-struct mmap_entry {
+struct MmapEntry {
   uint32_t size;
   uint64_t addr;
   uint64_t len;
   uint32_t type;
 };
 
-void PrintMemMap(uint32_t length, mmap_entry* entry) {
-  for (mmap_entry* i = entry;
+void PrintMemMap(uint32_t length, MmapEntry* entry) {
+  for (MmapEntry* i = entry;
        ((uint32_t) i) < ((uint32_t) entry) + length;
-       i = (mmap_entry*) (((uint32_t) i) + i->size + sizeof(i->size))) {
+       i = (MmapEntry*) (((uint32_t) i) + i->size + sizeof(i->size))) {
     kprintln(i->size, "->", Hex((uint32_t) i->addr),
         ":", Hex((uint32_t) i->len), ":", i->type);
   }
@@ -69,7 +69,7 @@ extern "C" void kmain(uint32_t magic, Multiboot* mb) {
   kprintln("mmap_length: ", mb->mmap_length);
   kprintln("mmap_addr: ", mb->mmap_addr);
 
-  PrintMemMap(mb->mmap_length, (mmap_entry*) mb->mmap_addr);
+  PrintMemMap(mb->mmap_length, (MmapEntry*) mb->mmap_addr);
 
   while (1);
 }
