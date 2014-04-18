@@ -3,6 +3,7 @@
 #include "kprint.h"
 #include "vector.h"
 #include "idt.h"
+#include "vm.h"
 
 struct Multiboot {
   uint32_t flags;
@@ -35,6 +36,7 @@ void PrintMemMap(uint32_t length, MmapEntry* entry) {
 }
 
 extern "C" void SetupPic();
+extern "C" void EnablePaging(PageDirectoryEntry* page_directory);
 
 struct InterruptInfo {
   uint32_t int_no;
@@ -53,6 +55,23 @@ extern "C" void OnKeyboardInterrupt(uint32_t scancode) {
   kprintln("keyboard: ", Hex(scancode), "(", x, ", ", o, ")");
 }
 
+#define PAGE_SIZE 4096
+#define ALIGNED(x) __attribute__((__aligned__(x)))
+
+void SetupVM() {
+  static ALIGNED(PAGE_SIZE) PageDirectoryEntry page_dir[1024];
+  for (uint32_t i = 0; i < 1024; i++)
+    page_dir[i].SetAddress(i);
+
+  kprintln("page directory at ", (uint32_t) page_dir);
+  uint32_t addr = (uint32_t) page_dir;
+  if (addr & (PAGE_SIZE - 1)) {
+    kprintln("not aligned at 4k, stopping");
+    while (1);
+  }
+  EnablePaging(page_dir);
+}
+
 extern "C" void kmain(uint32_t magic, Multiboot* mb) {
   SetupPic();
   Idt idt;
@@ -60,8 +79,9 @@ extern "C" void kmain(uint32_t magic, Multiboot* mb) {
   asm("sti");
   g_screen()->Clear();
 
-  int x[] = {1,2,3,4,5};
-  kprintln(x);
+  kprintln("setting up VM");
+  SetupVM();
+
   kprintln("magic: ", Hex(magic));
   kprintln("flags: ", Binary(mb->flags));
   kprintln("mem_lower: ", mb->mem_lower);

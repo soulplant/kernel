@@ -1,7 +1,5 @@
 [bits 32]
 
-global start
-
 MODULEALIGN equ 1<<0
 MEMINFO     equ 1<<1
 FLAGS       equ MODULEALIGN | MEMINFO
@@ -26,6 +24,7 @@ align 4
 
 extern kmain
 
+global start
 start:
   mov ax, 0x10
   mov ds, ax
@@ -39,6 +38,20 @@ start:
   push eax
   call kmain
   jmp $
+
+global EnablePaging
+EnablePaging:
+  mov eax, [esp+4]
+  mov cr3, eax
+
+  mov eax, cr4
+  or eax, 0x00000010
+  mov cr4, eax
+
+  mov eax, cr0
+  or eax, 0x80000000
+  mov cr0, eax
+  ret
 
 GDT_start:
   ; null selector (reserved by processor)
