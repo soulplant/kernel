@@ -77,6 +77,7 @@ struct printer<int> {
 template<>
 struct printer<unsigned int> {
   static void print(unsigned int n) {
+    // TODO(koz): Don't do this.
     printer<int>::print(n);
   }
 };
