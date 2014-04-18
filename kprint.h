@@ -84,7 +84,7 @@ struct printer<unsigned int> {
 template<>
 struct printer<bool> {
   static void print(bool b) {
-    print(b ? '1' : '0');
+    kprint(b ? '1' : '0');
   }
 };
 
