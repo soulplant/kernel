@@ -21,7 +21,7 @@ stack_bottom:
   resb 16384
 stack_top:
 
-section .text:
+section .text
 align 4
 
 extern kmain
